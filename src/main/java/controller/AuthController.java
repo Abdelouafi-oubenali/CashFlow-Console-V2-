@@ -12,9 +12,9 @@ public class AuthController {
         this.userService = userService ;
     }
 
-    public boolean register(User user)
+    public boolean register(User user , String email)
     {
-        return userService.register(user) ;
+        return userService.register(user , email ) ;
     }
 
     public boolean login(String email, String password) {

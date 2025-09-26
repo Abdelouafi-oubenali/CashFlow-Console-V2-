@@ -1,0 +1,20 @@
+package main.java.controller;
+
+import main.java.model.Account;
+import main.java.model.Client;
+import main.java.model.User;
+import main.java.service.AccountService;
+
+public class AccountController {
+    private AccountService accountService ;
+
+    public AccountController (AccountService accountService)
+    {
+         this.accountService = accountService ;
+    }
+
+    public void createAccount(Client client , Account account , User user)
+    {
+         accountService.createAccount(client ,account , user) ;
+    }
+}

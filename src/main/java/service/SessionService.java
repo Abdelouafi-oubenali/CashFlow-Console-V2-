@@ -7,11 +7,11 @@ import java.util.Map;
 
 public class SessionService {
 
-    private static Map<String, Role> sessions = new HashMap<>();
+    private static Map<String, User> sessions = new HashMap<>();
 
     public static void startSession(User user) {
-        sessions.put(user.getEmail(), user.getRole());
-        System.out.println(user.getRole());
+        sessions.put(user.getEmail(), user);
+        System.out.println(sessions.get(user.getEmail()));
     }
 
     public static void endSession(User user) {
@@ -22,7 +22,19 @@ public class SessionService {
         return sessions.containsKey(user.getEmail());
     }
 
-    public static Role getUserRole(User user) {
-        return sessions.get(user.getEmail());
+    public static Role getUserRole(String email) {
+        User u = sessions.get(email);
+        if (u != null) {
+            return u.getRole();
+        }
+        return null;
+    }
+
+    public static String getUserName(String email) {
+        User u = sessions.get(email);
+        if (u != null) {
+            return u.getFirstname();
+        }
+        return null;
     }
 }
