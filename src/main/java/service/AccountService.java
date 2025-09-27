@@ -6,10 +6,13 @@ import main.java.model.User;
 import main.java.repository.AccountRepository;
 import main.java.service.SessionService;
 import main.java.enums.Role;
+import main.com.example.myapp.Main;
+import java.util.Scanner ;
 
 public class AccountService {
     private AccountRepository accountRepository;
-
+    private Main main = new Main();
+   Scanner sc = new Scanner(System.in) ;
     public AccountService(AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
     }
@@ -28,4 +31,19 @@ public class AccountService {
             return true;
         }
     }
+
+    public void updateAccount() {
+
+        System.out.println("================== list des clients ===================== ") ;
+        accountRepository.listClient();
+        System.out.println("select Id users pour les modifacasion :");
+        String client_id = sc.nextLine();
+        Main.getUserViewInstance().updateAccount(client_id) ;
+
+    }
+    public void saveupdateAccount(Client client, Account account, String clientId)
+    {
+        accountRepository.saveUpdate(client,account,clientId);
+    }
+
 }

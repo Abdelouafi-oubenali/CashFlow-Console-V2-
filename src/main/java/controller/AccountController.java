@@ -17,4 +17,16 @@ public class AccountController {
     {
          accountService.createAccount(client ,account , user) ;
     }
+
+
+    public void UpdateAccount()
+    {
+        accountService.updateAccount() ;
+    }
+    
+
+    public void saveupdateAccount(Client client, Account account, String clientId)
+    {
+        accountService.saveupdateAccount(client ,account , clientId) ;
+    }
 }

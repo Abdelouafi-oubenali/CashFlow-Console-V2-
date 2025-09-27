@@ -10,6 +10,7 @@ import main.java.model.User;
 import java.math.BigDecimal;
 import java.util.Scanner;
 
+
 import main.java.service.SessionService;
 
 public class UserView {
@@ -63,7 +64,7 @@ public class UserView {
             switch (choix) {
                 case 1 -> register();
                 case 2 -> createAccount();
-                case 3 -> System.out.println("Gestion des comptes...");
+                case 3 -> AccountMenu();
                 case 4 -> System.out.println("Gestion des crédits...");
                 case 5 -> System.out.println("Gestion des profils...");
                 case 6 -> System.out.println("Traitement des demandes de crédits...");
@@ -184,5 +185,74 @@ public class UserView {
         System.out.println("Compte créé avec succès !");
     }
 
-    
+    public void updateAccount(String client_id) {
+        if (email_Login == null || SessionService.getUserRole(email_Login) != Role.ADMIN) {
+            System.out.println("Désolé, vous n'avez pas la permission !");
+            return;
+        }
+        System.out.println("====== Update d’un compte client ========");
+        System.out.print("Prénom : ");
+        String firstname = sc.nextLine();
+        System.out.print("Nom : ");
+        String lastname = sc.nextLine();
+        System.out.print("CIN : ");
+        String cin = sc.nextLine();
+        System.out.print("Téléphone : ");
+        String phone = sc.nextLine();
+        System.out.print("Email : ");
+        String email = sc.nextLine();
+        System.out.print("Adresse : ");
+        String address = sc.nextLine();
+        System.out.print("Type de compte (ex: COURANT, EPARGNE) : ");
+        String typeInput = sc.nextLine();
+        System.out.print("Solde initial : ");
+        BigDecimal balance = sc.nextBigDecimal();
+        sc.nextLine();
+
+        Client client = new Client(firstname, lastname, cin, phone, email, address);
+
+        AccountType accountType;
+        try {
+            accountType = AccountType.valueOf(typeInput.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Type de compte invalide !");
+            return;
+        }
+
+        Account account = new Account(accountType, balance);
+
+        accountController.saveupdateAccount(client, account,client_id);
+
+        System.out.println("Compte créé avec succès !");
+    }
+
+    public void AccountMenu() {
+        if (email_Login == null || SessionService.getUserRole(email_Login) != Role.ADMIN) {
+            System.out.println("Désolé, vous n'avez pas la permission !");
+            return;
+        }
+
+        System.out.println("=========== Bienvenue dans la partie gestion des comptes ==============");
+        System.out.println("1. Mettre à jour un compte");
+        System.out.println("2. Fermer un compte");
+
+        int choix = sc.nextInt();
+
+        switch (choix) {
+            case 1:
+                UpdateAccount();
+                break;
+            case 2:
+                System.out.println("Vous êtes dans la partie fermeture d'un compte.");
+                break;
+            default:
+                System.out.println("Choix invalide !");
+        }
+    }
+
+    public void UpdateAccount()
+    {
+        accountController.UpdateAccount();
+    }
+
 }

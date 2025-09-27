@@ -8,5 +8,7 @@ import java.util.UUID;
 public interface AccountRepository {
     boolean checkAccount (Account account) ;
     void save(Client client , Account account , String email) ;
+    void listClient() ;
+    void saveUpdate(Client client , Account account , String email);
 
 }
