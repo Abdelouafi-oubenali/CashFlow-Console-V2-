@@ -31,6 +31,7 @@ public class UserService {
     public User login(String email, String password) {
         User user = userRepository.findByEmail(email);
         if (user != null && user.getPassword().equals(password)) {
+            System.out.println("test done login " + user) ;
             SessionService.startSession(user);
             return user;
         }

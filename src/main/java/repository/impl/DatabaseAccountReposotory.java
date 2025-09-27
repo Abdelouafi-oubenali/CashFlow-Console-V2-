@@ -2,6 +2,7 @@ package main.java.repository.impl;
 
 import main.java.model.Account;
 import main.java.model.Client;
+import main.java.model.User;
 import main.java.repository.AccountRepository;
 
 import java.sql.Connection;
@@ -9,6 +10,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
+import main.java.service.SessionService;
+
 
 public class DatabaseAccountReposotory implements AccountRepository {
     private Connection connection;
@@ -23,8 +26,8 @@ public class DatabaseAccountReposotory implements AccountRepository {
             String sql = "SELECT 1 FROM account WHERE client_id = ? AND type = ?";
 
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setObject(1, account.getClient());              // UUID au lieu de String
-            stmt.setString(2, account.getType().name());         // Enum -> String
+            stmt.setObject(1, account.getClient());
+            stmt.setString(2, account.getType().name());
 
             ResultSet rs = stmt.executeQuery();
             return !rs.next();
@@ -35,7 +38,9 @@ public class DatabaseAccountReposotory implements AccountRepository {
         }
     }
 
-    public void save(Client client, Account account) {
+    public void save(Client client, Account account , String email) {
+       User user =  SessionService.getUserAth(email);
+       System.out.println(user) ;
         String clientSql = "INSERT INTO clients (firstname, lastname, cin, phone, email, address) " +
                 "VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
         String accountSql = "INSERT INTO account (type, balance, currency, client_id, created_by) " +
@@ -67,7 +72,7 @@ public class DatabaseAccountReposotory implements AccountRepository {
             accountStmt.setBigDecimal(2, account.getBalance());
             accountStmt.setString(3, account.getCurrency().getCurrencyCode());
             accountStmt.setObject(4, clientId);
-            accountStmt.setObject(5, "testSesion");
+            accountStmt.setObject(5, user.getId());
 
             accountStmt.executeUpdate();
 

@@ -29,6 +29,13 @@ public class SessionService {
         }
         return null;
     }
+    public static User getUserAth(String email) {
+        User u = sessions.get(email);
+        if (u != null) {
+            return u;
+        }
+        return null;
+    }
 
     public static String getUserName(String email) {
         User u = sessions.get(email);

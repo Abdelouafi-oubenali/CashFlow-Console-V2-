@@ -5,6 +5,7 @@ import main.java.model.User;
 import main.java.repository.UserRepository;
 
 import java.sql.*;
+import java.util.UUID;
 
 public class DatabaseUserRepository implements UserRepository {
     private Connection connection ;
@@ -39,13 +40,18 @@ public class DatabaseUserRepository implements UserRepository {
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new User(
+                User user =  new User(
                         rs.getString("firstname"),
                         rs.getString("lastname"),
                         rs.getString("email"),
                         rs.getString("password"),
                         Role.valueOf(rs.getString("role"))
+
                 );
+                user.setId(UUID.fromString(rs.getString("id")));
+
+                return user ;
+
             }
         } catch (SQLException e) {
             e.printStackTrace();

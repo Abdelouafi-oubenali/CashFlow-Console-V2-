@@ -24,7 +24,7 @@ public class AccountService {
             System.out.println("Ce user existe déjà.");
             return false;
         } else {
-            accountRepository.save(client, account);
+            accountRepository.save(client, account, user.getEmail());
             return true;
         }
     }

@@ -36,6 +36,11 @@ public class User {
     public void setPassword(String password) { this.password = password; }
     public void setRole(Role role) { this.role = role; }
 
+    public void setId(UUID id) {
+        this.id = id;
+    }
+
+
     @Override
     public String toString() {
         return "User{" +

@@ -71,7 +71,7 @@ public class UserView {
                 case 8 -> System.out.println("Supervision des transactions...");
                 case 9 -> System.out.println("Gestion des frais et commissions...");
                 case 10 -> System.out.println("Génération des rapports financiers...");
-                case 0 -> System.out.println("Au revoir 👋");
+                case 0 -> System.out.println("Au revoir ");
                 default -> System.out.println("⚠ Option invalide, réessayez !");
             }
 

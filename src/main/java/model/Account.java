@@ -18,16 +18,21 @@ public class Account {
     public Account(AccountType accountType, BigDecimal balance) {
         this.type = accountType;
         this.balance = balance;
-//    this.currency = currency;
-//    this.client_id = client;
-//    this.createdBy = createdBy;
-        this.createdAt = LocalDateTime.now(); // date de création automatique
+        this.currency = Currency.getInstance("EUR");
+        this.createdAt = LocalDateTime.now();
     }
 
+    public Account(AccountType accountType, BigDecimal balance, Currency currency) {
+        this.type = accountType;
+        this.balance = balance;
+        this.currency = currency != null ? currency : Currency.getInstance("EUR");
+        this.createdAt = LocalDateTime.now();
+    }
 
     public UUID getId() {
         return id;
     }
+
 
     public AccountType getType() {
         return type;
@@ -39,6 +44,10 @@ public class Account {
 
     public Currency getCurrency() {
         return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 
     public UUID getClient() {
