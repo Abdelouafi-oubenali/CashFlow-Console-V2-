@@ -144,6 +144,10 @@ public class UserView {
     }
 
     private void createAccount() {
+        if (email_Login == null || SessionService.getUserRole(email_Login) != Role.ADMIN) {
+            System.out.println("Désolé, vous n'avez pas la permission !");
+            return;
+        }
         System.out.println("====== Création d’un compte client ========");
         System.out.print("Prénom : ");
         String firstname = sc.nextLine();
@@ -179,4 +183,6 @@ public class UserView {
 
         System.out.println("Compte créé avec succès !");
     }
+
+    
 }
