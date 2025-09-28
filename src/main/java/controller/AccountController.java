@@ -39,4 +39,9 @@ public class AccountController {
     {
         accountService.depositToAccount(client_id) ;
     }
+
+    public void retirer(String client_id)
+    {
+        accountService.retirerToAccount(client_id);
+    }
 }

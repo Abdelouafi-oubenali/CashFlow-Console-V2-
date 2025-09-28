@@ -87,5 +87,27 @@ public class AccountService {
         accountRepository.listAccountsByClient(client_id);
     }
 
+    public void retirerToAccount(String client_id) {
+        accountRepository.listAccountsByClient(client_id);
+
+        System.out.println("Entrez l'ID du compte pour retirer : ");
+        String accountId = sc.next();
+
+        System.out.println("Entrez le montant à retirer : ");
+        BigDecimal montantRetrait = sc.nextBigDecimal();
+
+        Account account = checkAccountInfo(accountId);
+        if (account == null || account.getBalance().compareTo(montantRetrait) < 0) {
+            System.out.println("Impossible de retirer : le compte n'existe pas ou solde insuffisant.");
+            return;
+        }
+
+        BigDecimal total = account.getBalance().subtract(montantRetrait);
+        accountRepository.updateBalanceAccount(accountId, total);
+
+        System.out.println("Retrait effectué avec succès !");
+        accountRepository.listAccountsByClient(client_id);
+    }
+
 
 }

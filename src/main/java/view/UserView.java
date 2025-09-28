@@ -262,6 +262,8 @@ public class UserView {
             case 2:
                 deposit();
                 break;
+            case 3:
+                retirer();
             default:
                 System.out.println("Choix invalide !");
         }
@@ -286,6 +288,11 @@ public class UserView {
     {
         accountController.deposit(get_list_clients());
 
+    }
+
+    public void retirer()
+    {
+        accountController.retirer(get_list_clients());
     }
 
 }
