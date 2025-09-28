@@ -29,4 +29,14 @@ public class AccountController {
     {
         accountService.saveupdateAccount(client ,account , clientId) ;
     }
+
+    public void get_list_clients()
+    {
+         accountService.get_list_clients() ;
+
+    }
+    public void deposit(String client_id)
+    {
+        accountService.depositToaccount(client_id) ;
+    }
 }

@@ -7,6 +7,8 @@ import main.java.repository.AccountRepository;
 import main.java.service.SessionService;
 import main.java.enums.Role;
 import main.com.example.myapp.Main;
+
+import java.util.ArrayList;
 import java.util.Scanner ;
 
 public class AccountService {
@@ -45,5 +47,12 @@ public class AccountService {
     {
         accountRepository.saveUpdate(client,account,clientId);
     }
-
+    public void get_list_clients()
+    {
+          accountRepository.listClient();
+    }
+    public void depositToaccount(String client_id)
+    {
+        accountRepository.listAccountsByClient(client_id) ;
+    }
 }

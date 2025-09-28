@@ -249,7 +249,9 @@ public class UserView {
 
         System.out.println("=========== Bienvenue dans la partie gestion des comptes ==============");
         System.out.println("1. Mettre à jour un compte");
-        System.out.println("2. Fermer un compte");
+        System.out.println("2. Faire un dépôt (DEPOSIT) ") ;
+        System.out.println("3. Faire un retrait (WITHDRAW)");
+        System.out.println("4. Fermer un compte");
 
         int choix = sc.nextInt();
 
@@ -258,7 +260,7 @@ public class UserView {
                 UpdateAccount();
                 break;
             case 2:
-                System.out.println("Vous êtes dans la partie fermeture d'un compte.");
+                deposit();
                 break;
             default:
                 System.out.println("Choix invalide !");
@@ -268,6 +270,22 @@ public class UserView {
     public void UpdateAccount()
     {
         accountController.UpdateAccount();
+    }
+
+
+    public String get_list_clients()
+    {
+        accountController.get_list_clients() ;
+        sc.nextLine();
+        System.out.println("entre id de user pour deposit") ;
+        String client_id = sc.nextLine();
+        return  client_id ;
+    }
+
+    public void deposit ()
+    {
+        accountController.deposit(get_list_clients());
+
     }
 
 }

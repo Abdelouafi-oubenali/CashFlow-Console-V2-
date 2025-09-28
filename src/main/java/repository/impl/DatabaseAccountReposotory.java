@@ -1,14 +1,19 @@
 package main.java.repository.impl;
 
+import main.java.enums.AccountType;
 import main.java.model.Account;
 import main.java.model.Client;
 import main.java.model.User;
 import main.java.repository.AccountRepository;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.Scanner ;
 import main.java.service.SessionService;
@@ -152,6 +157,50 @@ public class DatabaseAccountReposotory implements AccountRepository {
             e.printStackTrace();
         }
     }
+
+    public void listAccountsByClient(String clientId) {
+        String sql = "SELECT a.id AS account_id, a.type, a.balance, a.currency, a.created_by, a.created_at, " +
+                "c.firstname, c.lastname, c.email, c.cin, c.phone, c.address " +
+                "FROM account a " +
+                "JOIN clients c ON a.client_id = c.id " +
+                "WHERE c.id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setObject(1, UUID.fromString(clientId));
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    String accountId = rs.getObject("account_id", UUID.class).toString();
+                    String type = rs.getString("type");
+                    BigDecimal balance = rs.getBigDecimal("balance");
+                    String currency = rs.getString("currency");
+                    String createdBy = rs.getObject("created_by", UUID.class).toString();
+                    LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+
+                    String firstname = rs.getString("firstname");
+                    String lastname = rs.getString("lastname");
+                    String email = rs.getString("email");
+                    String cin = rs.getString("cin");
+                    String phone = rs.getString("phone");
+                    String address = rs.getString("address");
+
+                    System.out.println("Client: " + firstname + " " + lastname + " | Email: " + email +
+                            " | CIN: " + cin + " | Phone: " + phone + " | Address: " + address);
+                    System.out.println("  Account ID: " + accountId +
+                            ", Type: " + type +
+                            ", Balance: " + balance + " " + currency +
+                            ", Created By: " + createdBy +
+                            ", Created At: " + createdAt);
+                    System.out.println("------------------------------------------------------------");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+
 
 
 

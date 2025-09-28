@@ -3,6 +3,7 @@ package main.java.repository;
 import main.java.model.Account;
 import main.java.model.Client;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 public interface AccountRepository {
@@ -10,5 +11,6 @@ public interface AccountRepository {
     void save(Client client , Account account , String email) ;
     void listClient() ;
     void saveUpdate(Client client , Account account , String email);
+    void listAccountsByClient(String client_id) ;
 
 }
