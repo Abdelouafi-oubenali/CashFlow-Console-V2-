@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Scanner ;
 import main.java.service.SessionService;
+import main.java.enums.Currency ;
 public class DatabaseAccountReposotory implements AccountRepository {
     private Connection connection;
     private Scanner sc = new Scanner(System.in);
@@ -194,6 +195,35 @@ public class DatabaseAccountReposotory implements AccountRepository {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Account getAccountById(String account_id) {
+        String sql = "SELECT * FROM account WHERE id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setObject(1, UUID.fromString(account_id));
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Account(
+                            AccountType.valueOf(rs.getString("type")),
+                            rs.getBigDecimal("balance")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    public void updateBalanceAccount(String account_id , BigDecimal balance)
+    {
+        String sql = "UPDATE account SET balance = ? WHERE id = ?";
+        try(PreparedStatement stmt = connection.prepareStatement(sql)){
+            stmt.setBigDecimal(1,balance);
+            stmt.setObject(2, UUID.fromString(account_id));
+            stmt.executeUpdate();
+        }catch (SQLException e){
             e.printStackTrace();
         }
     }

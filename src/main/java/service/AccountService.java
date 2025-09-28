@@ -1,5 +1,6 @@
 package main.java.service;
 
+import main.java.enums.AccountType;
 import main.java.model.Account;
 import main.java.model.Client;
 import main.java.model.User;
@@ -8,6 +9,7 @@ import main.java.service.SessionService;
 import main.java.enums.Role;
 import main.com.example.myapp.Main;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner ;
 
@@ -51,8 +53,39 @@ public class AccountService {
     {
           accountRepository.listClient();
     }
-    public void depositToaccount(String client_id)
-    {
-        accountRepository.listAccountsByClient(client_id) ;
+
+    public Account checkAccountInfo(String accont_id) {
+        Account account = accountRepository.getAccountById(accont_id);
+
+        if (account != null) {
+            return account ;
+        } else {
+            System.out.println("No account found for account ID: " + accont_id);
+            return null ;
+        }
     }
+
+    public void depositToAccount(String client_id) {
+        accountRepository.listAccountsByClient(client_id);
+
+        System.out.println("Entrez l'ID du compte pour déposer : ");
+        String accountId = sc.next();
+
+        System.out.println("Entrez le montant à déposer : ");
+        BigDecimal newBalance = sc.nextBigDecimal();
+
+        Account account = checkAccountInfo(accountId);
+        if (account == null) {
+            System.out.println("Impossible de déposer : le compte n'existe pas.");
+            return;
+        }
+
+        BigDecimal total = account.getBalance().add(newBalance);
+        accountRepository.updateBalanceAccount(accountId, total);
+
+        System.out.println("Dépôt effectué avec succès !");
+        accountRepository.listAccountsByClient(client_id);
+    }
+
+
 }

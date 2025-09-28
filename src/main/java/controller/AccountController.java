@@ -37,6 +37,6 @@ public class AccountController {
     }
     public void deposit(String client_id)
     {
-        accountService.depositToaccount(client_id) ;
+        accountService.depositToAccount(client_id) ;
     }
 }
