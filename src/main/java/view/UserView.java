@@ -190,24 +190,39 @@ public class UserView {
             System.out.println("Désolé, vous n'avez pas la permission !");
             return;
         }
+
         System.out.println("====== Update d’un compte client ========");
+        sc.nextLine();
         System.out.print("Prénom : ");
         String firstname = sc.nextLine();
+
         System.out.print("Nom : ");
         String lastname = sc.nextLine();
+
         System.out.print("CIN : ");
         String cin = sc.nextLine();
+
         System.out.print("Téléphone : ");
         String phone = sc.nextLine();
+
         System.out.print("Email : ");
         String email = sc.nextLine();
+
         System.out.print("Adresse : ");
         String address = sc.nextLine();
+
         System.out.print("Type de compte (ex: COURANT, EPARGNE) : ");
         String typeInput = sc.nextLine();
+
         System.out.print("Solde initial : ");
-        BigDecimal balance = sc.nextBigDecimal();
-        sc.nextLine();
+        String balanceInput = sc.nextLine();
+        BigDecimal balance;
+        try {
+            balance = new BigDecimal(balanceInput);
+        } catch (NumberFormatException e) {
+            System.out.println("Montant invalide !");
+            return;
+        }
 
         Client client = new Client(firstname, lastname, cin, phone, email, address);
 
@@ -221,9 +236,9 @@ public class UserView {
 
         Account account = new Account(accountType, balance);
 
-        accountController.saveupdateAccount(client, account,client_id);
+        accountController.saveupdateAccount(client, account, client_id);
 
-        System.out.println("Compte créé avec succès !");
+        System.out.println("Compte mis à jour avec succès !");
     }
 
     public void AccountMenu() {
