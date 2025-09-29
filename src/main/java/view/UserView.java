@@ -1,6 +1,8 @@
 package main.java.view;
 
 import main.java.controller.AccountController;
+import main.java.controller.CriditController;
+
 import main.java.controller.AuthController;
 import main.java.enums.AccountType;
 import main.java.enums.Role;
@@ -18,10 +20,12 @@ public class UserView {
     private AuthController userController;
     private AccountController accountController; // ajout
     private Scanner sc = new Scanner(System.in);
+    private  CriditController criditController ;
 
-    public UserView(AuthController authController, AccountController accountController) {
+    public UserView(AuthController authController, AccountController accountController ,CriditController criditController) {
         this.userController = authController;
         this.accountController = accountController;
+        this.criditController = criditController ;
     }
 
     public void showMenu() {
@@ -65,7 +69,7 @@ public class UserView {
                 case 1 -> register();
                 case 2 -> createAccount();
                 case 3 -> AccountMenu();
-                case 4 -> System.out.println("Gestion des crédits...");
+                case 4 -> criditeDomonde();
                 case 5 -> System.out.println("Gestion des profils...");
                 case 6 -> System.out.println("Traitement des demandes de crédits...");
                 case 7 -> System.out.println("Validation des virements...");
@@ -323,6 +327,34 @@ public class UserView {
     private void transactionexterne()
     {
        accountController.transactionExterne(get_list_clients()) ;
+    }
+
+    public void criditeDomonde() {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("==================== Demande de Crédit ===========================");
+
+        System.out.print("Entrez le montant du crédit : ");
+        BigDecimal montant = sc.nextBigDecimal();
+
+        System.out.print("Entrez la durée en mois : ");
+        int dureeMois = sc.nextInt();
+
+        System.out.print("Entrez le taux d'intérêt (%) : ");
+        BigDecimal taux = sc.nextBigDecimal();
+
+        System.out.print("Entrez le type d'intérêt (SIMPLE/COMPOUND) : ");
+        String interestType = sc.next();
+
+        System.out.print("Entrez votre revenu mensuel : ");
+        BigDecimal revenuMensuel = sc.nextBigDecimal();
+
+        System.out.print("Entrez l'ID du compte lié : ");
+        String accountId = sc.next();
+        criditController.creditDomonde(montant, dureeMois, taux, interestType, revenuMensuel, accountId);
+
+        System.out.println("==================================================================");
+        System.out.println("Demande de crédit enregistrée (simulation) !");
     }
 
 }
