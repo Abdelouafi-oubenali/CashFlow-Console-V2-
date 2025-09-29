@@ -50,4 +50,8 @@ public class AccountController {
         accountService.transactionInterne(client_id) ;
 
     }
+    public void transactionExterne(String client_id)
+    {
+        accountService.transactionExterne(client_id) ;
+    }
 }

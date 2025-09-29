@@ -322,7 +322,7 @@ public class UserView {
 
     private void transactionexterne()
     {
-
+       accountController.transactionExterne(get_list_clients()) ;
     }
 
 }

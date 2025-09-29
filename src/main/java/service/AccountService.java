@@ -109,6 +109,8 @@ public class AccountService {
         accountRepository.listAccountsByClient(client_id);
     }
 
+
+
     public void transactionInterne(String envoyeur) {
         try {
             accountRepository.listAccountsByClient(envoyeur);
@@ -147,6 +149,32 @@ public class AccountService {
         }
     }
 
+    public void transactionExterne(String envoyeur) {
+        accountRepository.listAccountsByClient(envoyeur);
+        System.out.println("Sélectionnez l'ID du compte envoyeur : ");
+        String accountEnvoyeur = sc.next();
 
+        System.out.println("Entre id de client extern : ") ;
+        String accountextenr  = sc.next();
+        System.out.println("Entrez le montant à transférer : ");
+        BigDecimal montantTransfert = sc.nextBigDecimal();
+
+        Account compteEnvoyeur = checkAccountInfo(accountEnvoyeur);
+
+        BigDecimal frais = montantTransfert.multiply(BigDecimal.valueOf(0.02));
+        BigDecimal totalDebit = montantTransfert.add(frais);
+
+        if (compteEnvoyeur.getBalance().compareTo(totalDebit) < 0) {
+            System.out.println("Solde insuffisant pour effectuer le transfert.");
+        }
+
+        BigDecimal nouveauSoldeEnvoyeur = compteEnvoyeur.getBalance().subtract(totalDebit);
+        accountRepository.updateBalanceAccount(accountEnvoyeur, nouveauSoldeEnvoyeur);
+
+        System.out.println("Transaction externe envoyée avec succès.\n" +
+                "Montant transféré : " + montantTransfert + "\n" +
+                "Frais appliqués : " + frais + "\n" +
+                "Nouveau solde envoyeur : " + nouveauSoldeEnvoyeur + "\n");
+    }
 
 }

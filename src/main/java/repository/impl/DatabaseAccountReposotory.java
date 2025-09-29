@@ -203,7 +203,7 @@ public class DatabaseAccountReposotory implements AccountRepository {
         String sql = "SELECT * FROM account WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setObject(1, UUID.fromString(account_id));
-            try (ResultSet rs = stmt.executeQuery()) {
+            try (ResultSet  rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Account(
                             AccountType.valueOf(rs.getString("type")),
