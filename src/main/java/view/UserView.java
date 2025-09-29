@@ -249,9 +249,11 @@ public class UserView {
 
         System.out.println("=========== Bienvenue dans la partie gestion des comptes ==============");
         System.out.println("1. Mettre à jour un compte");
-        System.out.println("2. Faire un dépôt (DEPOSIT) ") ;
+        System.out.println("2. Faire un dépôt (DEPOSIT)");
         System.out.println("3. Faire un retrait (WITHDRAW)");
-        System.out.println("4. Fermer un compte");
+        System.out.println("4. Faire une transaction");
+        System.out.println("5. Fermer un compte");
+
 
         int choix = sc.nextInt();
 
@@ -264,6 +266,8 @@ public class UserView {
                 break;
             case 3:
                 retirer();
+            case 4:
+                transaction();
             default:
                 System.out.println("Choix invalide !");
         }
@@ -279,7 +283,7 @@ public class UserView {
     {
         accountController.get_list_clients() ;
         sc.nextLine();
-        System.out.println("entre id de user pour deposit") ;
+        System.out.println("entre id de client : ") ;
         String client_id = sc.nextLine();
         return  client_id ;
     }
@@ -293,6 +297,32 @@ public class UserView {
     public void retirer()
     {
         accountController.retirer(get_list_clients());
+    }
+
+    public void transaction()
+    {
+        System.out.println("============= Transaction Management ===============");
+        System.out.println("1. Transaction interne");
+        System.out.println("2. Transaction externe");
+        System.out.print("Entrez votre choix : ");
+        int choix = sc.nextInt();
+
+        if(choix == 1 )
+        {
+            transactionInterne() ;
+        } else if (choix == 2) {
+            transactionexterne();
+        }
+    }
+
+    private void transactionInterne()
+    {
+            accountController.transactionInterne(get_list_clients()) ;
+    }
+
+    private void transactionexterne()
+    {
+
     }
 
 }

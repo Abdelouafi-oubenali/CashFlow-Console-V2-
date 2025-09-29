@@ -44,4 +44,10 @@ public class AccountController {
     {
         accountService.retirerToAccount(client_id);
     }
+
+    public void transactionInterne(String client_id)
+    {
+        accountService.transactionInterne(client_id) ;
+
+    }
 }

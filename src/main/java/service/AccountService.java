@@ -109,5 +109,44 @@ public class AccountService {
         accountRepository.listAccountsByClient(client_id);
     }
 
+    public void transactionInterne(String envoyeur) {
+        try {
+            accountRepository.listAccountsByClient(envoyeur);
+            System.out.println("Sélectionnez l'ID du compte envoyeur : ");
+            String accountEnvoyeur = sc.next();
+
+            get_list_clients();
+            System.out.println("Entrez l'ID du client destinataire : ");
+            String idClientDestinataire = sc.next();
+
+            accountRepository.listAccountsByClient(idClientDestinataire);
+            System.out.println("Sélectionnez l'ID du compte destinataire : ");
+            String accountDestinataire = sc.next();
+
+            System.out.println("Entrez le montant à transférer : ");
+            BigDecimal montantTransfert = sc.nextBigDecimal();
+
+            Account accountEnvoiyer = checkAccountInfo(accountEnvoyeur);
+            Account accountTransfert = checkAccountInfo(accountDestinataire);
+            if (accountEnvoiyer.getBalance().compareTo(montantTransfert) < 0) {
+                System.out.println("Solde insuffisant pour effectuer le transfert.");
+                return;
+            }
+            BigDecimal nouveauSoldeEnvoyeur = accountEnvoiyer.getBalance().subtract(montantTransfert);
+            BigDecimal nouveauSoldeDestinataire = accountTransfert.getBalance().add(montantTransfert);
+
+            accountRepository.updateBalanceAccount(accountEnvoyeur, nouveauSoldeEnvoyeur);
+            accountRepository.updateBalanceAccount(accountDestinataire, nouveauSoldeDestinataire);
+
+            System.out.println(" Transaction effectuée avec succès !");
+            System.out.println("Nouveau solde de l'envoyeur : " + nouveauSoldeEnvoyeur);
+            System.out.println("Nouveau solde du destinataire : " + nouveauSoldeDestinataire);
+
+        } catch (Exception e) {
+            System.out.println("Erreur lors de la transaction : " + e.getMessage());
+        }
+    }
+
+
 
 }
