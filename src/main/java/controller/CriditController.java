@@ -15,4 +15,5 @@ public class CriditController {
         criditService.crediteDommonde(montant, dureeMois,taux,interestType,revenuMensuel,accountId);
     }
 
+
 }

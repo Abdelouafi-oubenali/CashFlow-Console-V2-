@@ -270,6 +270,7 @@ public class UserView {
                 break;
             case 3:
                 retirer();
+                break;
             case 4:
                 transaction();
             default:

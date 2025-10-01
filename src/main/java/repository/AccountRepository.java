@@ -1,6 +1,7 @@
 package main.java.repository;
 
 import main.java.model.Account;
+import main.java.model.Bank;
 import main.java.model.Client;
 
 import java.math.BigDecimal;
@@ -15,5 +16,7 @@ public interface AccountRepository {
     void listAccountsByClient(String client_id) ;
     void updateBalanceAccount(String client_id , BigDecimal balance) ;
     Account getAccountById(String client_id);
+    Bank getInfoBank(String bankId);
+    void updateBankBalance(Bank bank , String id) ;
 
 }

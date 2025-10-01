@@ -18,4 +18,54 @@ public class Credit {
     private CreditStatus status;        // Enum: ACTIVE, LATE, CLOSED
     private Account account;
     private LocalDateTime createdAt;
+
+    public Credit(UUID id, BigDecimal montant, LocalDate duree, BigDecimal taux, InterestType interestType, FeeRule feeRule, CreditStatus status, Account account, LocalDateTime createdAt) {
+        this.id = id;
+        this.montant = montant;
+        this.duree = duree;
+        this.taux = taux;
+        this.interestType = interestType;
+        this.feeRule = feeRule;
+        this.status = status;
+        this.account = account;
+        this.createdAt = createdAt;
+    }
+
+    // --- Getters ---
+    public UUID getId() {
+        return id;
+    }
+
+    public BigDecimal getMontant() {
+        return montant;
+    }
+
+    public LocalDate getDuree() {
+        return duree;
+    }
+
+    public BigDecimal getTaux() {
+        return taux;
+    }
+
+    public InterestType getInterestType() {
+        return interestType;
+    }
+
+    public FeeRule getFeeRule() {
+        return feeRule;
+    }
+
+    public CreditStatus getStatus() {
+        return status;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
 }
+}
+

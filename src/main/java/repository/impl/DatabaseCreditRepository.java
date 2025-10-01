@@ -28,7 +28,7 @@ public class DatabaseCreditRepository implements CreditRepository {
             stmt.setString(4, interestType);
             stmt.setString(5, "PENDING");
             stmt.setObject(6, UUID.fromString(accountId));
-            stmt.setBigDecimal(7, revenuMensuel); // ✅ الآن العمود NOT NULL مغطى
+            stmt.setBigDecimal(7, revenuMensuel);
 
             int rows = stmt.executeUpdate();
             if (rows > 0) {

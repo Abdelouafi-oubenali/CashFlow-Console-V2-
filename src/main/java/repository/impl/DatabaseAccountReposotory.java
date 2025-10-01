@@ -4,6 +4,7 @@ import main.java.enums.AccountType;
 import main.java.model.Account;
 import main.java.model.Client;
 import main.java.model.User;
+import main.java.model.Bank;
 import main.java.repository.AccountRepository;
 
 import java.math.BigDecimal;
@@ -12,12 +13,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.Scanner ;
 import main.java.service.SessionService;
-import main.java.enums.Currency ;
+
 public class DatabaseAccountReposotory implements AccountRepository {
     private Connection connection;
     private Scanner sc = new Scanner(System.in);
@@ -45,7 +44,7 @@ public class DatabaseAccountReposotory implements AccountRepository {
     public void save(Client client, Account account , String email) {
        User user =  SessionService.getUserAth(email);
         String clientSql = "INSERT INTO clients (firstname, lastname, cin, phone, email, address) " +
-                "VALUES (?, ?, ?, ?, ?, ?) RETURNING id";
+                "VALUES (?, ?, ?, ?, ?, ?)";
         String accountSql = "INSERT INTO account (type, balance, currency, client_id, created_by) " +
                 "VALUES (?, ?, ?, ?, ?)";
 
@@ -228,8 +227,50 @@ public class DatabaseAccountReposotory implements AccountRepository {
         }
     }
 
+    public Bank getInfoBank(String bankId) {
+        String sql = "SELECT * FROM bank WHERE id = ?";
+
+        try (PreparedStatement prmt = connection.prepareStatement(sql)) {
+            prmt.setString(1, bankId);
+
+            ResultSet rs = prmt.executeQuery();
+            if (rs.next()) {
+                BigDecimal capital = rs.getBigDecimal("capital");
+                BigDecimal totalFees = rs.getBigDecimal("total_fees");
+                BigDecimal totalGains = rs.getBigDecimal("total_gains");
+
+                Bank bank = new Bank(capital, totalFees, totalGains);
+
+                rs.close();
+                return bank;
+            } else {
+                rs.close();
+                System.out.println("Aucune banque trouvée avec cet ID !");
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
 
+
+    public void updateBankBalance(Bank bank, String bankId) {
+        String sql = "UPDATE bank SET capital = ?, total_fees = ?, total_gains = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setBigDecimal(1, bank.getCapital());
+            stmt.setBigDecimal(2, bank.getTotal_fees());
+            stmt.setBigDecimal(3, bank.getTotal_gains());
+            stmt.setString(4, bankId);
+
+            int rowsUpdated = stmt.executeUpdate();
+            System.out.println("Lignes mises à jour : " + rowsUpdated);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 
