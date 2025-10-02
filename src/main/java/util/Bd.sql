@@ -48,21 +48,21 @@ CREATE TABLE transaction (
     CONSTRAINT chk_diff_accounts CHECK (account_from_id <> account_to_id)
 );
 
-CREATE TABLE credit (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    montant DECIMAL(15,2) NOT NULL,
-    duree DATE,
-    taux DECIMAL(15,2),
-    interest_type VARCHAR(15) CHECK (interest_type IN ('SIMPLE','COMPOUND')) NOT NULL,
-    status VARCHAR(15) CHECK (status IN ('PENDING','ACTIVE','LATE','CLOSED')) NOT NULL DEFAULT 'PENDING',
-    account_id UUID NOT NULL,
-    revenu_mensuel DECIMAL(15,2) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT fk_credit_account FOREIGN KEY (account_id) REFERENCES account(id),
-    CONSTRAINT fk_credit_fee_rule FOREIGN KEY (fee_rule_id) REFERENCES FeeRule(id)
-);
+    CREATE TABLE credit (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        montant DECIMAL(15,2) NOT NULL,
+        duree INT,
+        taux DECIMAL(15,2),
+        interest_type VARCHAR(15) CHECK (interest_type IN ('SIMPLE','COMPOUND')) NOT NULL,
+        status VARCHAR(15) CHECK (status IN ('PENDING','ACTIVE','LATE','CLOSED' , 'REFUSED')) NOT NULL DEFAULT 'PENDING',
+        account_id UUID NOT NULL,
+        revenu_mensuel DECIMAL(15,2) NOT NULL,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        CONSTRAINT fk_credit_account FOREIGN KEY (account_id) REFERENCES account(id),
+        CONSTRAINT fk_credit_fee_rule FOREIGN KEY (fee_rule_id) REFERENCES FeeRule(id)
+    );
 
-CREATE TABLE bank (
+CREATE TABLE bank ( 
     id VARCHAR(50) PRIMARY KEY,
     capital DECIMAL(15,2) DEFAULT 0,
     total_fees DECIMAL(15,2) DEFAULT 0,
@@ -74,3 +74,4 @@ VALUES ('550e8400-e29b-41d4-a716-446655440000', 900000, 10000000, 0);
 
 
 -- crount joub 
+-- GBA 

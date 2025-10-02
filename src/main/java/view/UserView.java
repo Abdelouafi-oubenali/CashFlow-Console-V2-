@@ -8,9 +8,13 @@ import main.java.enums.AccountType;
 import main.java.enums.Role;
 import main.java.model.Account;
 import main.java.model.Client;
+import main.java.model.Credit;
 import main.java.model.User;
 import java.math.BigDecimal;
+import java.sql.SQLException;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.UUID;
 
 
 import main.java.service.SessionService;
@@ -28,7 +32,7 @@ public class UserView {
         this.criditController = criditController ;
     }
 
-    public void showMenu() {
+    public void showMenu() throws SQLException {
         while (true) {
             System.out.println("\n=== MENU AUTH ===");
             System.out.println("1. Se connecter");
@@ -45,7 +49,7 @@ public class UserView {
         }
     }
 
-    public void showMenuAdmin() {
+    public void showMenuAdmin() throws SQLException {
         int choix;
         do {
             System.out.println("\n===== Bienvenue dans l’espace administrateur =====");
@@ -69,7 +73,7 @@ public class UserView {
                 case 1 -> register();
                 case 2 -> createAccount();
                 case 3 -> AccountMenu();
-                case 4 -> criditeDomonde();
+                case 4 -> checkOperationCredit();
                 case 5 -> System.out.println("Gestion des profils...");
                 case 6 -> System.out.println("Traitement des demandes de crédits...");
                 case 7 -> System.out.println("Validation des virements...");
@@ -118,7 +122,7 @@ public class UserView {
         }
     }
 
-    private void login() {
+    private void login() throws SQLException {
         System.out.print("Email : ");
         String email = sc.nextLine();
         System.out.print("Mot de passe : ");
@@ -330,7 +334,24 @@ public class UserView {
        accountController.transactionExterne(get_list_clients()) ;
     }
 
-    public void criditeDomonde() {
+    public void checkOperationCredit() throws SQLException {
+        System.out.println("=========== Check opération de crédit ===========");
+        System.out.println("1. Vérifier les demandes");
+        System.out.println("2. Faire une demande");
+
+        int choix = sc.nextInt();
+
+        if (choix == 1) {
+            verifierDemandeCredit();
+        } else if (choix == 2) {
+            creditDemande();
+        } else {
+            System.out.println("Ce choix n'existe pas !");
+        }
+    }
+
+
+    public void creditDemande() {
         Scanner sc = new Scanner(System.in);
 
         System.out.println("==================== Demande de Crédit ===========================");
@@ -358,4 +379,51 @@ public class UserView {
         System.out.println("Demande de crédit enregistrée (simulation) !");
     }
 
+    public Optional<Credit> listDemande() throws SQLException {
+        System.out.println("============== list des dommonde ============ ");
+       // System.out.println(criditController.listDemande()) ;
+        return criditController.listDemande() ;
+    }
+
+    public void verifierDemandeCredit() throws SQLException {
+         Optional<Credit> creditList = listDemande() ;
+
+        if (creditList.isPresent()) {
+            UUID id = creditList.get().getId();
+            BigDecimal montoneDommonde = creditList.get().getMontant() ;
+            BigDecimal revenuMensuel = creditList.get().getRevenu_mensuel();
+            boolean check =  criditController.checkCridit(montoneDommonde , revenuMensuel , id);
+            if(check)
+            {
+                System.out.println("hi iam viow =========  if " + check);
+
+                sc.nextLine() ;
+                System.out.println("ce account et les condision pour acccipt le dommonde est exicit ....  " );
+                System.out.println("ese que ce dommonde confirm oui/non : ");
+                String choix = sc.nextLine() ;
+                if(choix.equals("oui"))
+                {
+                    accepterDemande(id);
+                    System.out.println("La demande de crédit de l'utilisateur est acceptée ");
+
+                } else if (choix.equals("non")) {
+                    refuserDemande(id);
+                    System.out.println("La demande de crédit est refusée. ") ;
+                }
+            }else{
+                System.out.println("Votre demande est invalide, les conditions ne sont pas remplies ou aucun crédit trouvé.");
+            }
+        } else {
+            System.out.println("Pas de condision pour la dommonde de crédit trouvé !");
+        }
+    }
+
+    public void accepterDemande(UUID idDommonde) throws SQLException {
+        criditController.accepterDemande(idDommonde) ;
+    }
+
+    public void refuserDemande(UUID idDommonde) throws SQLException
+    {
+        criditController.refuserDemande(idDommonde) ;
+    }
 }
