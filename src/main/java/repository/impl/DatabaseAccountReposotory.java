@@ -13,8 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.UUID;
-import java.util.Scanner ;
+import java.util.*;
+
 import main.java.service.SessionService;
 
 public class DatabaseAccountReposotory implements AccountRepository {
@@ -202,8 +202,10 @@ public class DatabaseAccountReposotory implements AccountRepository {
         String sql = "SELECT * FROM account WHERE id = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setObject(1, UUID.fromString(account_id));
+
             try (ResultSet  rs = stmt.executeQuery()) {
                 if (rs.next()) {
+
                     return new Account(
                             AccountType.valueOf(rs.getString("type")),
                             rs.getBigDecimal("balance")
@@ -225,6 +227,46 @@ public class DatabaseAccountReposotory implements AccountRepository {
         }catch (SQLException e){
             e.printStackTrace();
         }
+    }
+
+        public List<Account> getAccountsTypeCredit() {
+        String sql = "SELECT * FROM account WHERE type = 'CREDIT'";
+        List<Account> accounts = new ArrayList<>();
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                UUID id = (UUID) rs.getObject("id");
+                BigDecimal balance = rs.getBigDecimal("balance");
+
+                String type = rs.getString("type");
+                AccountType accountType = AccountType.valueOf(type.toUpperCase());
+
+                Account account = new Account(id ,accountType , balance );
+                accounts.add(account);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return accounts;
+    }
+    public BigDecimal sallerAccount(UUID id)
+    {
+        String sql = "SELECT revenu_mensuel FROM credit WHERE account_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setObject(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBigDecimal("revenu_mensuel");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return BigDecimal.ZERO;
     }
 
     public Bank getInfoBank(String bankId) {
@@ -254,8 +296,6 @@ public class DatabaseAccountReposotory implements AccountRepository {
         }
     }
 
-
-
     public void updateBankBalance(Bank bank, String bankId) {
         String sql = "UPDATE bank SET capital = ?, total_fees = ?, total_gains = ? WHERE id = ?";
 
@@ -272,8 +312,24 @@ public class DatabaseAccountReposotory implements AccountRepository {
         }
     }
 
-
-
+//    public void updateBaloneAccount(BigDecimal montant, UUID compteId)
+//    {
+//        String sql = "UPDATE account SET balance = balance + ? WHERE id = ?";
+//
+//        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+//            stmt.setBigDecimal(1, montant);
+//            stmt.setObject(2, compteId);
+//            int lignesModifiees = stmt.executeUpdate();
+//
+//            if (lignesModifiees > 0) {
+//                System.out.println("Solde mis à jour avec succès pour le compte : " + compteId);
+//            } else {
+//                System.out.println("Aucun compte trouvé avec cet ID.");
+//            }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
 //    public void UpdateInfoToclient()
 //    {

@@ -21,18 +21,21 @@ public class Account {
         this.currency = Currency.getInstance("EUR");
         this.createdAt = LocalDateTime.now();
     }
-
-    public Account(AccountType accountType, BigDecimal balance, Currency currency) {
+    public Account(UUID id ,AccountType accountType, BigDecimal balance) {
+        this.id = id ;
         this.type = accountType;
         this.balance = balance;
-        this.currency = currency != null ? currency : Currency.getInstance("EUR");
+        this.currency = Currency.getInstance("EUR");
         this.createdAt = LocalDateTime.now();
     }
 
     public UUID getId() {
-        return id;
+        return this.id;
     }
 
+    public UUID getClient_id() {
+        return client_id;
+    }
 
     public AccountType getType() {
         return type;
@@ -60,5 +63,18 @@ public class Account {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", type=" + type +
+                ", balance=" + balance +
+                ", currency=" + currency +
+                ", client_id=" + client_id +
+                ", createdBy=" + createdBy +
+                ", createdAt=" + createdAt +
+                '}';
     }
 }

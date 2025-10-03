@@ -50,6 +50,7 @@ CREATE TABLE transaction (
 
     CREATE TABLE credit (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        balance DECIMAL(15,2) NOT NULL DEFAULT 0.00,
         montant DECIMAL(15,2) NOT NULL,
         duree INT,
         taux DECIMAL(15,2),

@@ -204,6 +204,11 @@ public class AccountService {
                 "Nouveau solde envoyeur : " + nouveauSoldeEnvoyeur + "\n");
     }
 
+    public void updateAcoountSaller(UUID idAccount , BigDecimal montone)
+    {
+
+    }
+
 
 
 }

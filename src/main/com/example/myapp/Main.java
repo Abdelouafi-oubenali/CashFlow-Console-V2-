@@ -39,6 +39,7 @@ public class Main {
             CriditController criditController = new CriditController(criditService) ;
 
             userViewInstance = new UserView(authController, accountController, criditController);
+            userViewInstance.Tasktest(accountRepository) ;
             userViewInstance.showMenu();
 
         } catch (SQLException e) {

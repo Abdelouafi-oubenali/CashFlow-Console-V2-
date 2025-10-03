@@ -17,7 +17,9 @@ import java.util.Scanner;
 import java.util.UUID;
 
 
+import main.java.repository.AccountRepository;
 import main.java.service.SessionService;
+import main.java.service.TasksAsynchrone;
 
 public class UserView {
     private static String email_Login = null ;
@@ -436,5 +438,11 @@ public class UserView {
     public void refuserDemande(UUID idDommonde) throws SQLException
     {
         criditController.refuserDemande(idDommonde) ;
+    }
+
+    public void Tasktest(AccountRepository accountRepository)
+    {
+        TasksAsynchrone tasksAsynchrone = new TasksAsynchrone() ;
+        tasksAsynchrone.StartTask(accountRepository);
     }
 }

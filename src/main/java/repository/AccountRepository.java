@@ -6,6 +6,7 @@ import main.java.model.Client;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public interface AccountRepository {
@@ -18,5 +19,7 @@ public interface AccountRepository {
     Account getAccountById(String client_id);
     Bank getInfoBank(String bankId);
     void updateBankBalance(Bank bank , String id) ;
+    List<Account> getAccountsTypeCredit() ;
+    BigDecimal sallerAccount(UUID id) ;
 
 }
