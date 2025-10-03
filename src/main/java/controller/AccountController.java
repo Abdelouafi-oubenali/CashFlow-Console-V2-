@@ -5,6 +5,8 @@ import main.java.model.Client;
 import main.java.model.User;
 import main.java.service.AccountService;
 
+import java.util.UUID;
+
 public class AccountController {
     private AccountService accountService ;
 
@@ -53,5 +55,10 @@ public class AccountController {
     public void transactionExterne(String client_id)
     {
         accountService.transactionExterne(client_id) ;
+    }
+
+    public Account getAcccountByid (UUID id)
+    {
+        return accountService.checkAccountInfo(String.valueOf(id)) ;
     }
 }

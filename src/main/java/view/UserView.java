@@ -352,9 +352,22 @@ public class UserView {
 
 
     public void creditDemande() {
-        Scanner sc = new Scanner(System.in);
+        //Scanner sc = new Scanner(System.in);
 
         System.out.println("==================== Demande de Crédit ===========================");
+        System.out.print("Entrez l'ID du compte lié : ");
+        String accountId = sc.next();
+        Account account = accountController.getAcccountByid(UUID.fromString(accountId));
+
+        if (account == null) {
+            System.out.println("Aucun compte trouvé avec cet ID.");
+            return;
+        }
+
+        if (account.getType() != AccountType.CREDIT) {
+            System.out.println("Le compte choisi n'est pas de type CRÉDIT !");
+            return;
+        }
 
         System.out.print("Entrez le montant du crédit : ");
         BigDecimal montant = sc.nextBigDecimal();
@@ -371,8 +384,7 @@ public class UserView {
         System.out.print("Entrez votre revenu mensuel : ");
         BigDecimal revenuMensuel = sc.nextBigDecimal();
 
-        System.out.print("Entrez l'ID du compte lié : ");
-        String accountId = sc.next();
+
         criditController.creditDomonde(montant, dureeMois, taux, interestType, revenuMensuel, accountId);
 
         System.out.println("==================================================================");
@@ -395,8 +407,6 @@ public class UserView {
             boolean check =  criditController.checkCridit(montoneDommonde , revenuMensuel , id);
             if(check)
             {
-                System.out.println("hi iam viow =========  if " + check);
-
                 sc.nextLine() ;
                 System.out.println("ce account et les condision pour acccipt le dommonde est exicit ....  " );
                 System.out.println("ese que ce dommonde confirm oui/non : ");
@@ -411,6 +421,7 @@ public class UserView {
                     System.out.println("La demande de crédit est refusée. ") ;
                 }
             }else{
+                refuserDemande(id) ;
                 System.out.println("Votre demande est invalide, les conditions ne sont pas remplies ou aucun crédit trouvé.");
             }
         } else {
