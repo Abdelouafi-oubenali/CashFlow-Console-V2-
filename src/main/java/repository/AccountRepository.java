@@ -21,5 +21,7 @@ public interface AccountRepository {
     void updateBankBalance(Bank bank , String id) ;
     List<Account> getAccountsTypeCredit() ;
     BigDecimal sallerAccount(UUID id) ;
+    BigDecimal montoneCredit(UUID id) ;
+    void updateBankBalanceJust(BigDecimal balonce , String id) ;
 
 }

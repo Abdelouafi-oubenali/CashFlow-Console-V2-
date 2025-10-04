@@ -6,37 +6,43 @@ import java.util.concurrent.* ;
 import java.util.stream.Collectors;
 
 import main.java.model.Account;
+import main.java.model.Bank;
 import main.java.repository.AccountRepository;
 
 public class TasksAsynchrone {
-    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2) ;
+    private ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
 
 
-    public void StartTask(AccountRepository accountRepository)
-    {
+    public void startTask(AccountRepository accountRepository) {
         Runnable task = () -> {
-            System.out.println("helllo i'm abde louafi " + java.time.LocalTime.now());
-            List<Account> listAccountCredit = accountRepository.getAccountsTypeCredit() ;
+            System.out.println("Hello, I'm Abde Louafi — " + java.time.LocalTime.now());
+
+            List<Account> listAccountCredit = accountRepository.getAccountsTypeCredit();
+
             listAccountCredit.forEach(acc -> {
                 System.out.println("ID: " + acc.getId() +
                         ", Type: " + acc.getType() +
                         ", Balance: " + acc.getBalance());
             });
 
-            for(Account account : listAccountCredit)
-            {
-                BigDecimal balance = account.getBalance() ;
-                BigDecimal revenu_mensuel =  accountRepository.sallerAccount(account.getId()) ;
-                BigDecimal total = balance.add(revenu_mensuel) ;
-                System.out.println("id = " + account);
-                System.out.println("account balance =======" + balance);
-                System.out.println("account revenu_mensuel =======" + revenu_mensuel);
-                System.out.println("account total =======" + total);
+            for (Account account : listAccountCredit) {
+                BigDecimal balance = account.getBalance();
+                BigDecimal revenuMensuel = accountRepository.sallerAccount(account.getId());
+                BigDecimal montantCredit = accountRepository.montoneCredit(account.getId());
 
-                accountRepository.updateBalanceAccount(account.getId().toString(),total);
-                BigDecimal newbalance = account.getBalance() ;
+                BigDecimal totalApresSalaire = balance.add(revenuMensuel);
 
-                System.out.println("account updated =======" + newbalance);
+                BigDecimal total = totalApresSalaire.subtract(montantCredit);
+
+                Bank bank = accountRepository.getInfoBank("550e8400-e29b-41d4-a716-446655440000");
+                BigDecimal capital = bank.getCapital();
+
+                BigDecimal updatedCapital = capital.add(montantCredit);
+                accountRepository.updateBankBalanceJust(updatedCapital, "550e8400-e29b-41d4-a716-446655440000");
+
+                accountRepository.updateBalanceAccount(account.getId().toString(), total);
+
+                System.out.println("Nouveau solde pour le compte " + account.getId() + " = " + total);
             }
 
             try {
@@ -45,6 +51,7 @@ public class TasksAsynchrone {
                 e.printStackTrace();
             }
         };
+
         scheduler.scheduleWithFixedDelay(task, 1, 5, TimeUnit.SECONDS);
     }
 }

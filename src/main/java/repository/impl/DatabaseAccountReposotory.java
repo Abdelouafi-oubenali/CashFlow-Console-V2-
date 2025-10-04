@@ -269,6 +269,24 @@ public class DatabaseAccountReposotory implements AccountRepository {
         return BigDecimal.ZERO;
     }
 
+    public BigDecimal montoneCredit(UUID id)
+    {
+        String sql = "SELECT montant FROM credit WHERE account_id = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setObject(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getBigDecimal("montant");
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return BigDecimal.ZERO;
+    }
+
+
     public Bank getInfoBank(String bankId) {
         String sql = "SELECT * FROM bank WHERE id = ?";
 
@@ -295,6 +313,25 @@ public class DatabaseAccountReposotory implements AccountRepository {
             return null;
         }
     }
+    public void updateBankBalanceJust(BigDecimal capital, String bankId) {
+        String sql = "UPDATE bank SET capital = ? WHERE id = ?";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setBigDecimal(1, capital);
+            stmt.setString(2, bankId);
+
+            int rowsUpdated = stmt.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Capital de la banque mis à jour avec succès !");
+            } else {
+                System.out.println("Aucune banque trouvée avec cet ID.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public void updateBankBalance(Bank bank, String bankId) {
         String sql = "UPDATE bank SET capital = ?, total_fees = ?, total_gains = ? WHERE id = ?";
