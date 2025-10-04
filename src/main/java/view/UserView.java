@@ -406,7 +406,8 @@ public class UserView {
             UUID id = creditList.get().getId();
             BigDecimal montoneDommonde = creditList.get().getMontant() ;
             BigDecimal revenuMensuel = creditList.get().getRevenu_mensuel();
-            boolean check =  criditController.checkCridit(montoneDommonde , revenuMensuel , id);
+            int mois = creditList.get().getDuree() ;
+            boolean check =  criditController.checkCridit(montoneDommonde , revenuMensuel , id, mois);
             if(check)
             {
                 sc.nextLine() ;

@@ -1,6 +1,7 @@
 package main.java.service;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.util.Optional;
 import java.util.Scanner;
@@ -26,11 +27,19 @@ public class CriditService {
         creditRepository.saveCridit(montant , dureeMois , taux , interestType ,revenuMensuel , accountId) ;
     }
 
-    public boolean creditCheck(BigDecimal montant, BigDecimal revenuMensuel) {
+    public boolean creditCheck(BigDecimal montant, BigDecimal revenuMensuel, int mois) {
         BigDecimal quarantePourcent = new BigDecimal("0.40");
-        BigDecimal calcul = revenuMensuel.multiply(quarantePourcent);
-        System.out.println("montant demandé : " + montant + " | revenuMensuel : " + revenuMensuel + " | 40% revenu = " + calcul);
-        return calcul.compareTo(montant) >= 0;
+        BigDecimal numberCheck = revenuMensuel.multiply(quarantePourcent);
+        BigDecimal moisBig = new BigDecimal(mois);
+
+        BigDecimal mensualite = montant.divide(moisBig, 2, RoundingMode.HALF_UP);
+
+        System.out.println("Montant demandé : " + montant +
+                " | Revenu mensuel : " + revenuMensuel +
+                " | 40% du revenu = " + numberCheck +
+                " | Mensualité = " + mensualite);
+
+        return mensualite.compareTo(numberCheck) <= 0;
     }
     public boolean checkCreditIfExist(UUID idAccount) throws SQLException {
         Optional<Credit> credit = creditRepository.getCreditById(idAccount);

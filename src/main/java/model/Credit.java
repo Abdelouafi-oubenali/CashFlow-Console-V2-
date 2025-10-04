@@ -42,7 +42,7 @@ public class Credit {
         return montant;
     }
 
-    public int tDuree() {
+    public int getDuree() {
         return duree;
     }
 

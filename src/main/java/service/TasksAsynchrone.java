@@ -15,16 +15,7 @@ public class TasksAsynchrone {
 
     public void startTask(AccountRepository accountRepository) {
         Runnable task = () -> {
-            System.out.println("Hello, I'm Abde Louafi — " + java.time.LocalTime.now());
-
             List<Account> listAccountCredit = accountRepository.getAccountsTypeCredit();
-
-            listAccountCredit.forEach(acc -> {
-                System.out.println("ID: " + acc.getId() +
-                        ", Type: " + acc.getType() +
-                        ", Balance: " + acc.getBalance());
-            });
-
             for (Account account : listAccountCredit) {
                 BigDecimal balance = account.getBalance();
                 BigDecimal revenuMensuel = accountRepository.sallerAccount(account.getId());
@@ -42,7 +33,6 @@ public class TasksAsynchrone {
 
                 accountRepository.updateBalanceAccount(account.getId().toString(), total);
 
-                System.out.println("Nouveau solde pour le compte " + account.getId() + " = " + total);
             }
 
             try {

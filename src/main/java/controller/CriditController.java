@@ -24,8 +24,8 @@ public class CriditController {
         return criditService.listDemande();
     }
 
-    public boolean checkCridit(BigDecimal montonDommonde, BigDecimal revenuMensuel, UUID idAccount) throws SQLException {
-        boolean chekBalonce = criditService.creditCheck(montonDommonde, revenuMensuel);
+    public boolean checkCridit(BigDecimal montonDommonde, BigDecimal revenuMensuel, UUID idAccount , int mois) throws SQLException {
+        boolean chekBalonce = criditService.creditCheck(montonDommonde, revenuMensuel, mois);
         boolean chekIfexict = criditService.checkCreditIfExist(idAccount);
         if (chekBalonce && chekIfexict) {
             return true;

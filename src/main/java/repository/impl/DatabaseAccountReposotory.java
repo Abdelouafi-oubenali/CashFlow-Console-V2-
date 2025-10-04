@@ -323,7 +323,7 @@ public class DatabaseAccountReposotory implements AccountRepository {
             int rowsUpdated = stmt.executeUpdate();
 
             if (rowsUpdated > 0) {
-                System.out.println("Capital de la banque mis à jour avec succès !");
+                
             } else {
                 System.out.println("Aucune banque trouvée avec cet ID.");
             }
